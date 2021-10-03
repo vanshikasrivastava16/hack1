@@ -1,0 +1,69 @@
+/*
+Objective : To sort the given array in minimum no. of flips
+*/
+#include<stdio.h>
+
+int x=0;
+void flip(int n,int *a)
+{
+  int t,i;
+   for(i=0;i<=n/2;i++)
+   {
+       t=a[i];
+       a[i]=a[n-i];
+       a[n-i]=t;
+   }
+
+
+}
+void flipflop(int *a,int i)
+{
+   if(i==-1)
+   return;
+   else
+   {
+      int t=0,j;
+      int k=-1;
+
+      for(j=0;j<=i;j++)
+      {
+         if(t<a[j])
+         {
+            t=a[j];
+            k=j;
+         }
+      }
+      if(a[i]!=a[k])
+       {
+          flip(k,a);
+          printf("F%d()\n",k);
+          flip(i,a);
+          printf("F%d()\n",i);
+          x+=2;
+       }
+       flipflop(a,i-1);
+   }
+}
+int main()
+{
+
+  int n,i;
+  scanf("%d",&n);
+  
+  int a[n];
+ 
+  for(i=0;i<n;i++)
+  {
+     scanf("%d",&a[i]);
+  }
+  printf("The following operations are needed to sort the array:\n");
+  flipflop(a,n-1);
+  printf("The minimum no. of flips required to sort the array = %d\n\n",x);
+  printf("The sorted array is: ");
+  for(i=0;i<n;i++)
+  {
+    printf("%d ",a[i]);
+  }
+return 0;
+}
+    
