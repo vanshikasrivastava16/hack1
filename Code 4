@@ -1,0 +1,51 @@
+    #include<bits/stdc++.h>
+    using namespace std;
+     
+    int main()
+    {
+        
+        string s1,s2;
+
+        cout<<"Enter gene 1= ";
+        cin>>s1;
+
+        cout<<"Enter gene 2= ";
+        cin>>s2;
+        cout<<endl;
+        
+        int a[s1.size()+1][s2.size()+1],i,j;
+        
+        for(i=0;i<=s1.size();i++)
+        {
+            a[i][0]=i;
+        }
+        for(i=0;i<=s2.size();i++)
+        {
+            a[0][i]=i;
+        }
+        
+       
+
+        for(i=1;i<=s1.size();i++)
+        {
+            for(j=1;j<=s2.size();j++)
+            {
+                if(s1[i-1]==s2[j-1])
+                    {
+                        a[i][j]=a[i-1][j-1];
+                    }
+                else
+                {
+                    a[i][j]=min(a[i-1][j]+1,min(a[i-1][j-1]+1,a[i][j-1]+1));
+                }
+            }
+        }
+        cout<<"Similarity: "<<s1.size()+s2.size()-a[s1.size()][s2.size()]<<endl;
+        cout<<"Total number of operations required: "<<a[s1.size()][s2.size()]<<endl;
+
+
+        
+     
+    return 0;
+    }
+
