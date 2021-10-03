@@ -1,0 +1,300 @@
+/*
+Program to find the sequence in which patients were called in the clinic
+*/
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+
+
+struct pat
+{
+char name[500];
+int time;
+int uni;
+}p[10000],t,o[10000],e;
+
+
+void rebuildheap(int i,int n)
+{
+if(2*i>n)
+return;
+else
+{
+if(2*i<n)
+{
+if(p[2*i].uni>p[i].uni||((p[2*i].uni==p[i].uni)&&p[2*i].time<p[i].time))
+{
+e=p[2*i];
+    p[2*i]=p[i];
+    p[i]=e;
+    rebuildheap(2*i,n);
+}
+else if(p[2*i+1].uni>p[i].uni||((p[2*i+1].uni==p[i].uni)&&p[2*i+1].time<p[i].time))
+{
+e=p[2*i+1];
+    p[2*i+1]=p[i];
+    p[i]=e;
+    rebuildheap(2*i+1,n);
+}
+
+}
+else if(2*i==n)
+{
+if(p[2*i].uni>p[i].uni||((p[2*i].uni==p[i].uni)&&p[2*i].time<p[i].time))
+{
+e=p[2*i];
+    p[2*i]=p[i];
+    p[i]=e;
+    rebuildheap(2*i,n);
+}
+}
+
+}
+}
+
+
+void heapify(int i)
+{
+    if(i/2==0)
+    return;
+    else
+    {
+    if(p[i/2].uni<p[i].uni||(p[i/2].uni==p[i].uni)&&p[i/2].time>p[i].time)
+    {
+    e=p[i/2];
+    p[i/2]=p[i];
+    p[i]=e;
+    heapify(i/2);
+    }
+    }
+}
+
+void insert(int n)
+{
+p[n]=t;
+heapify(n);
+
+}
+
+int main()
+{
+    int w=1;
+
+    char doc[500];
+    printf("Enter name of doctor:\n");
+    scanf("%s",doc);
+
+    int g[26]={0};
+    int l=strlen(doc);
+    int i,f;
+    for(i=0;i<l;i++)
+    {
+        if(doc[i]<='Z'&&doc[i]>='A')
+        {
+            g[doc[i]-'A']++;
+        }
+        else
+            g[doc[i]-'a']++;
+
+    }
+    int n,k;
+    printf("Total no. of patients:\n");
+    scanf("%d",&n);
+   
+    printf("Enter no. of patients arrived till 8 am:\n");
+    scanf("%d",&k);
+    n-=k;
+
+    printf("Enter name of patients and their arrival time in this form (name time am/pm):\n");
+    int x,y;
+    char c;
+    char z[3];
+   
+    int r;
+    for(i=0;i<k;i++)
+    {
+    //printf("\nHello\n");
+       
+        r=0;
+        scanf(" %s",t.name);
+        //printf("%s",t.name);
+        l=strlen(t.name);
+        int h[26]={0};
+        for(f=0;f<l;f++)
+        {
+            if(t.name[f]<='Z'&&t.name[f]>='A')
+            {
+            h[t.name[f]-'A']++;
+            }
+            else
+            h[t.name[f]-'a']++;
+
+        }
+        for(f=0;f<26;f++)
+        {
+            if(g[f]>0&&h[f]>0)
+            r++;
+        }
+        t.uni=r;
+        scanf("%d%c%d",&x,&c,&y);
+        scanf("%s",z);
+        if(strcmp(z,"am")&&x!=12)
+        {
+            x+=12;
+        }
+        t.time=x*60+y;
+        insert(w);
+        w++;
+        //printf("%s %d.%d %s %d %d\n",t.name,x,y,z,t.uni,t.time);
+
+    }
+
+    int j=0,q;
+
+    o[j++]=p[1];
+    p[1]=p[w-1];
+    rebuildheap(1,w-2);
+    w--;
+
+    while(1)
+    {
+        printf("Are there more patients?(0/1)\n");
+        scanf("%d",&q);
+        if(q==1)
+        {
+            printf("Enter no. of patients arrived now:\n");
+            scanf("%d",&k);
+            n-=k;
+
+            printf("Enter name of patients and their arrival time in this form (name time am/pm):\n");
+ 
+            for(i=0;i<k;i++)
+            {
+                r=0;
+                scanf("%s",t.name);
+                l=strlen(t.name);
+                int h[26]={0};
+                for(f=0;f<l;f++)
+                {
+                    if(t.name[f]<='Z'&&t.name[f]>='A')
+                    {
+                        h[t.name[f]-'A']++;
+                    }
+                    else
+                        h[t.name[f]-'a']++;
+
+                }
+                // for(f=0;f<26;f++)
+                // {
+                //     printf("%d ",h[f]);
+                // }
+                // printf("\n");
+                for(f=0;f<26;f++)
+                {
+                    if(g[f]>0&&h[f]>0)
+                        r++;
+                }
+                t.uni=r;
+                scanf("%d%c%d",&x,&c,&y);
+                scanf("%s",z);
+                if(strcmp(z,"am")&&x!=12)
+                {
+                    x+=12;
+                }
+                t.time=x*60+y;
+                insert(w);
+                w++;
+                //printf("%s %d.%d %s %d %d\n",t.name,x,y,z,t.uni,t.time);
+
+            }
+            o[j++]=p[1];
+            p[1]=p[w-1];
+
+            rebuildheap(1,w-2);
+            w--;
+
+        }
+        else
+        {
+            if(n==0)
+            break;
+            else
+            {
+                o[j++]=p[1];
+                p[1]=p[w-1];
+                rebuildheap(1,w-2);
+                w--;
+            }
+        }
+    }
+   
+
+    for(i=0;i<j;i++)
+    {
+        x=o[i].time/60;
+        y=o[i].time-(o[i].time/60)*60;
+        if(x>12)
+        {
+        x=x-12;
+        z[0]='p';
+        z[1]='m';
+        z[2]='\0';
+        }
+        else if(x==12)
+        {
+        z[0]='p';
+        z[1]='m';
+        z[2]='\0';
+        }
+        else
+        {
+        z[0]='a';
+        z[1]='m';
+        z[2]='\0';
+        }
+        printf("%s %d.%d %s\n",o[i].name,x,y,z);
+
+
+    }
+    //printf("%d\n",w);
+    if(w==1)
+    {
+        exit(0);
+    }
+    while(1)
+    {
+        x=p[1].time/60;
+        y=p[1].time-(p[1].time/60)*60;
+        if(x>12)
+        {
+        x=x-12;
+        z[0]='p';
+        z[1]='m';
+        z[2]='\0';
+       
+        }
+        else if(x==12)
+        {
+        z[0]='p';
+        z[1]='m';
+        z[2]='\0';
+        }
+        else
+        {
+        z[0]='a';
+        z[1]='m';
+        z[2]='\0';
+        }
+        printf("%s %d:%d %s\n",p[1].name,x,y,z);
+        if(w==2)
+        break;
+        p[1]=p[w-1];
+        
+        rebuildheap(1,w-2);
+        w--;
+    }
+
+
+
+return 0;
+}
